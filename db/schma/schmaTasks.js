@@ -5,7 +5,7 @@ const tasksSchma = new mongoose.Schema({
       "type": Date,
       "default": () => Date.now()
     },
-    "tasksStatus": {
+    "tasksStatusColumn": {
       "type": String,
       "default": "todo" 
     },

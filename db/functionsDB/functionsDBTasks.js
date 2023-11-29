@@ -1,6 +1,9 @@
 import SchmaTasks from "../schma/schmaTasks.js";
 
-export async function AddTasks(userName,content,IDproject){
+export const AddTasks = async(req,res) => {
+    const userName = req.body.userName;
+    const content = req.body.content;
+    const IDproject = req.body.IDproject;
     try{
         const newTasks = await SchmaTasks.create({
         "IDproject":IDproject,
@@ -12,7 +15,8 @@ export async function AddTasks(userName,content,IDproject){
     }
 }
 
-export async function DeleteTasks(taskeId) {
+export const DeleteTasks = async(req,res) => {
+  const taskeId = req.body.taskeId;
   try{
       const rmTaske = await SchmaTasks.findByIdAndDelete(taskeId);
   if (!rmTaske) {
@@ -23,7 +27,9 @@ export async function DeleteTasks(taskeId) {
   }
   }
 
-export async function UpdateTasksStatus(taskId, newStatus) {
+export const UpdateTasksStatus = async(req,res) => {
+    const taskId = req.body.taskId;
+    const newStatus = req.body.newStatus;
     try {
       const updateStatus = await SchmaTasks.findByIdAndUpdate(
         taskId,
@@ -41,7 +47,9 @@ export async function UpdateTasksStatus(taskId, newStatus) {
     }
 }
 
-export async function UpdateTaskContent(taskId, newContent) {
+export const UpdateTaskContent = async(req,res) => {
+    const taskId = req.body.taskId;
+    const newContent = req.body.newContent;
     try {  
   
       const updateContent = await SchmaTasks.findByIdAndUpdate(
@@ -60,7 +68,8 @@ export async function UpdateTaskContent(taskId, newContent) {
     }
 }
 
-export async function GetTasksByProjectId(projectId) {
+export const GetTasksByProjectId = async(req,res) => {
+  const projectId = req.body.projectId;
   try {
     const tasks = await SchmaTasks.find({ IDproject: projectId });
 
@@ -77,7 +86,9 @@ export async function GetTasksByProjectId(projectId) {
   }
 }
 
-export async function UpdateResponsibleUsername(taskId, newResponsibleUsername) {
+export const UpdateResponsibleUsername = async(req,res) => {
+  const taskId = req.body.taskId;
+  const newResponsibleUsername = req.body.newResponsibleUsername;
   try {
   
     const result = await SchmaTasks.findByIdAndUpdate(

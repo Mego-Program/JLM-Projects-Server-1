@@ -82,3 +82,40 @@ export const GetAllData = async(req,res) => {
     }
 }
 
+export const GetProjectByID = async (req, res) => {
+    console.log("fun")
+    try {
+      const projectId = req.body.projectId;
+      const project = await SchemaProject.findById(projectId);
+      if (!project) {
+        return res.status(404).json({ message: 'Project not found' });
+      }
+      res.json(project);
+
+    } catch (error) {
+      console.error('Error fetching project:', error.message);
+      res.status(500).json({ message: 'Internal server error' });
+    }
+}
+
+export const UpdateProjectColumnUrgency = async(req,res) => {
+    const projectID = req.body.projectId;
+    const columnID = req.body.columnID; 
+    const newColumnUrgency = req.body.newColumnUrgency;
+    console.log(newColumnUrgency)
+    try {
+        const updatedProject = await SchemaProject.findOneAndUpdate(
+          { _id: projectID, 'columns.id': columnID },
+          { $set: { 'columns.$.ColumnUrgency': newColumnUrgency } },
+          { new: true }
+        );
+  
+      if (updatedProject) {
+        console.log(`המצב של המשימה ${projectID} עודכן ל-${newColumnUrgency} בהצלחה.`);
+      } else {
+        console.log(`לא נמצאה משימה עם ID: ${projectID}.`);
+      }
+    } catch (error) {
+      console.error('שגיאה במהלך העדכון:', error.message);
+    }
+}
