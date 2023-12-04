@@ -1,29 +1,48 @@
 import SchmaTasks from "../schma/schmaTasks.js";
 
-export async function AddTasks(userName,content,IDproject){
+export const AddTasks = async(req,res) => {
+    const IDproject = req.body.projectID;
+    const columnId = req.body.columnId
+    const header = req.body.header;
+    const content = req.body.content;
+    const issue = req.body.issue;
+    const asignee = req.body.asignee;
+    const date = req.body.date;
+
     try{
         const newTasks = await SchmaTasks.create({
         "IDproject":IDproject,
-        "ResponsibleUsername":userName,
+        "columnId":columnId,
+        "header":header,
         "content":content,
+        "issue":issue,
+        "asignee":asignee,
+        "date":date
     })
+    res.json(newTasks)
     }catch(error){
         console.log(error);
     }
 }
 
-export async function DeleteTasks(taskeId) {
+export const DeleteTasks = async(req,res) => {
+  const taskeId = req.body.taskeId;
+  // const columnId = req.body.columnId
   try{
       const rmTaske = await SchmaTasks.findByIdAndDelete(taskeId);
   if (!rmTaske) {
       throw new Error("משתמש לא קיים");
   }
+  console.log(rmTaske);
+  res.json(rmTaske)
   }catch(error){
       console.log(error)
   }
   }
 
-export async function UpdateTasksStatus(taskId, newStatus) {
+export const UpdateTasksStatus = async(req,res) => {
+    const taskId = req.body.taskId;
+    const newStatus = req.body.newStatus;
     try {
       const updateStatus = await SchmaTasks.findByIdAndUpdate(
         taskId,
@@ -41,7 +60,11 @@ export async function UpdateTasksStatus(taskId, newStatus) {
     }
 }
 
-export async function UpdateTaskContent(taskId, newContent) {
+
+
+export const UpdateTaskContent = async(req,res) => {
+    const taskId = req.body.taskId;
+    const newContent = req.body.newContent;
     try {  
   
       const updateContent = await SchmaTasks.findByIdAndUpdate(
@@ -60,24 +83,21 @@ export async function UpdateTaskContent(taskId, newContent) {
     }
 }
 
-export async function GetTasksByProjectId(projectId) {
+export const GetTasksByProjectId = async(req,res) => {
+  const projectId = req.body.projectId;
   try {
     const tasks = await SchmaTasks.find({ IDproject: projectId });
-
-    if (tasks.length > 0) {
-      console.log(`המשימות המשויכות לפרויקט ${projectId}:`);
-      console.log(tasks);
+      res.json(tasks)
       return tasks; // החזרת התוצאות
-    } else {
-      console.log(`לא נמצאו משימות משויכות לפרויקט עם ID: ${projectId}.`);
-      return null; // או כל ערך אחר שתרצה להחזיר במקרה שאין נתונים
-    }
+    
   } catch (error) {
     console.error('שגיאה במהלך השליפה:', error.message);
   }
 }
 
-export async function UpdateResponsibleUsername(taskId, newResponsibleUsername) {
+export const UpdateResponsibleUsername = async(req,res) => {
+  const taskId = req.body.taskId;
+  const newResponsibleUsername = req.body.newResponsibleUsername;
   try {
   
     const result = await SchmaTasks.findByIdAndUpdate(

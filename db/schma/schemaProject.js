@@ -1,23 +1,31 @@
 import mongoose from "mongoose";
 
 const projectSchema = new mongoose.Schema({
-  "projectsProductionDate": {
-    "type": Date,
-    "default": () => Date.now()
+  
+  projectsProductionDate: {
+    type: Date,
+    default: () => Date.now(),
   },
-  "projectManager": {
-    "type": String,
-    "required": true
+  projectManager: {
+    type: String,
+    required: true,
   },
-  "projectName": {
-    "type": String,
-    "required": true
+  projectName: {
+    type: String,
+    required: true,
   },
-  "projectMembers": {
-    "type": Array,
-    "default": []
-    
-  }
+  projectMembers: {
+    type: Array,
+    default: [],
+  },
+  columns: {
+    type: Array,
+    default: [
+      { id: "todo" ,column: "Todo", ColumnUrgency: "🔘" },
+      { id: "doing" ,column: "Work in progress", ColumnUrgency: "🔘" },
+      { id: "todo" ,column: "Done", ColumnUrgency: "🔘" }
+    ],
+  },
 });
 
 const SchemaProject = mongoose.model("projects", projectSchema);

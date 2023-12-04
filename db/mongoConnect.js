@@ -15,17 +15,6 @@ const coonected = async () => {
     catch(err){
         console.log(err);
     }
-
-// AddProject("Elazar","zilber")
-// DeleteProject("655f5d378505458f27c73d87")
-// AddMemberToProject("655f5d328c80db2652c2057c","shalom")
-// RemoveMemberFromProject("655f5d328c80db2652c2057c","s")
-// GetAllData()
-
-// AddTasks("moshe brizel","sdfghjhgfd","655f598999a30dda03d17e74")
-// UpdateTasksStatus("655f8ca762a7e45bad0bc412","doing")
-// GetTasksByProjectId("655f598999a30dda03d17e74")
-
 }
 
 export default coonected
