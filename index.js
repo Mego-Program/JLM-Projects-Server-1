@@ -22,10 +22,8 @@ app.use("/projects",routerProject);
 app.use("/tasks",routerTasks)
 
 
-if (!process.env.IS_VERCEL){
-  app.listen(port, () => {
-    console.log(`Server is running on port ${port}`);
-  });
-}
+app.listen(port, () => {
+  console.log(`Server is running on port ${port}`);
+});
 
 export default app
