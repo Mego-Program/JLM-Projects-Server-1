@@ -1,18 +1,23 @@
 import SchmaTasks from "../schma/schmaTasks.js";
 
 export const AddTasks = async(req,res) => {
-    const IDproject = req.body.IDproject;
+    const IDproject = req.body.projectID;
     const columnId = req.body.columnId
-    const userName = req.body.userName;
+    const header = req.body.header;
     const content = req.body.content;
-    
-    
+    const issue = req.body.issue;
+    const asignee = req.body.asignee;
+    const date = req.body.date;
+
     try{
         const newTasks = await SchmaTasks.create({
         "IDproject":IDproject,
         "columnId":columnId,
-        "ResponsibleUsername":userName,
+        "header":header,
         "content":content,
+        "issue":issue,
+        "asignee":asignee,
+        "date":date
     })
     res.json(newTasks)
     }catch(error){
@@ -82,17 +87,8 @@ export const GetTasksByProjectId = async(req,res) => {
   const projectId = req.body.projectId;
   try {
     const tasks = await SchmaTasks.find({ IDproject: projectId });
-
-    if (tasks.length > 0) {
-      console.log(`המשימות המשויכות לפרויקט ${projectId}:`);
-      console.log(tasks);
       res.json(tasks)
       return tasks; // החזרת התוצאות
-      
-    } else {
-      console.log(`לא נמצאו משימות משויכות לפרויקט עם ID: ${projectId}.`);
-      return null; // או כל ערך אחר שתרצה להחזיר במקרה שאין נתונים
-    }
     
   } catch (error) {
     console.error('שגיאה במהלך השליפה:', error.message);

@@ -1,23 +1,31 @@
 import mongoose from "mongoose";
 
 const tasksSchma = new mongoose.Schema({
-    "ProductionDate": {
-      "type": Date,
-      "default": () => Date.now()
+    // "ProductionDate": {
+    //   "type": Date,
+    //   "default": () => Date.now()
+    // },
+    "IDproject": {
+      "type": String
     },
     "columnId": {
       "type": String,
       "default": "todo" 
     },
-    "IDproject": {
+    "header":{
+      "type":String
+    },
+    "asignee": {
       "type": String
     },
-    "ResponsibleUsername": {
-      "type": String,
-      
+    "issue":{
+      "type":String
     },
     "content": {
       "type": String
+    },
+    "date":{
+      "type":Date
     },
     "profilImage":{
       "type":String
