@@ -15,7 +15,6 @@ import {
 const routerProject = express.Router();
 
 routerProject.post("/add_project",AddProject);
-
 routerProject.post("/add_member_to_project",AddMemberToProject);
 routerProject.post("/remove_member_from_project",RemoveMemberFromProject);
 routerProject.post("/get_all_data",GetAllData);
