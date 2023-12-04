@@ -4,8 +4,8 @@
   "description": "",
   "type": "module",
   "scripts": {
-    "test": "node server.js",
-    "server": "nodemon server.js",
+    "test": "node index.js",
+    "server": "nodemon index.js",
     "client": "nodemon todo.js"
   },
   "keywords": [],
