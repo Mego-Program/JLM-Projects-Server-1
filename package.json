@@ -2,6 +2,8 @@
   "name": "servsr-pro",
   "version": "1.0.0",
   "description": "",
+  "main": "index.js",
+  "engines": "18.x",
   "type": "module",
   "scripts": {
     "test": "node index.js",
