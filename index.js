@@ -7,7 +7,7 @@ import cors from 'cors';
 
 
 const app = express();
-const port = process.env.PORT | 8137 
+const port = process.env.PORT || 8137 
 const db = connected()
 app.use(express.json());
 
