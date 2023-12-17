@@ -1,4 +1,5 @@
 import SchemaProject from "../schma/schemaProject.js";
+import SchmaTasks from "../schma/schmaTasks.js";
 import mongoose from 'mongoose';
 
 export const AddProject = async (req, res) => {
@@ -156,26 +157,26 @@ export const UpdateProjectColumnText = async (req, res) => {
     }
   };
 
-export const addColumnToProject = async (projectId, newColumn) => {
-  try {
-    // מצא את ה-project לפי ה-ID
-    const project = await SchemaProject.findById(projectId);
+// export const addColumnToProject = async (projectId, newColumn) => {
+//   try {
+//     // מצא את ה-project לפי ה-ID
+//     const project = await SchemaProject.findById(projectId);
 
-    if (!project) {
-      throw new Error("Project not found");
-    }
+//     if (!project) {
+//       throw new Error("Project not found");
+//     }
 
-    // הוסף את ה-column החדש למערך ה-columns
-    project.columns.push(newColumn);
+//     // הוסף את ה-column החדש למערך ה-columns
+//     project.columns.push(newColumn);
 
-    // שמור את ה-project עם ה-column החדש
-    await project.save();
+//     // שמור את ה-project עם ה-column החדש
+//     await project.save();
 
-    console.log(`Column added successfully to project with ID: ${projectId}`);
-  } catch (error) {
-    console.error(`Error adding column to project: ${error.message}`);
-  }
-};
+//     console.log(`Column added successfully to project with ID: ${projectId}`);
+//   } catch (error) {
+//     console.error(`Error adding column to project: ${error.message}`);
+//   }
+// };
 
 export const AddNewColumn = async (req, res) => {
   const projectID = req.body.projectId;
@@ -211,10 +212,17 @@ export const DeleteColumn = async (req, res) => {
     if (!rmProject) {
       throw new Error("משתמש לא קיים");
     }
+
+    const tasksToDelete = await SchmaTasks.find({ columnId }); 
+    await SchmaTasks.deleteMany({ _id: { $in: tasksToDelete.map(t => t._id) } });
+    
+
     rmProject.columns = rmProject.columns.filter((col) => col.id !== columnId);
     await rmProject.save();
     res.json(rmProject)
   } catch (error) {
     console.log(error);
   }
+
+  
 };

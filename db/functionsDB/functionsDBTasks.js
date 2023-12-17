@@ -42,19 +42,23 @@ export const DeleteTasks = async (req, res) => {
 
 export const UpdateTasksStatus = async (req, res) => {
   const taskId = req.body.taskId;
-  const newStatus = req.body.newStatus;
+  const newColumn = req.body.newColumn;
+ 
   try {
     const updateStatus = await SchmaTasks.findByIdAndUpdate(
       taskId,
-      { $set: { tasksStatus: newStatus } },
+      { $set: { columnId: newColumn } },
       { new: true } // הפרמטר הזה מחזיר את המסמך המעודכן
     );
 
     if (updateStatus) {
-      console.log(`המצב של המשימה ${taskId} עודכן ל-${newStatus} בהצלחה.`);
+      
+      console.log(`המצב של המשימה ${taskId} עודכן ל-${newColumn} בהצלחה.`);
     } else {
+      
       console.log(`לא נמצאה משימה עם ID: ${taskId}.`);
     }
+    res.json(updateStatus)
   } catch (error) {
     console.error("שגיאה במהלך העדכון:", error.message);
   }
@@ -83,7 +87,7 @@ export const UpdateTaskContent = async (req, res) => {
     );
 
     if (updateContent) {
-      console.log(`התוכן של המשימה ${taskId} עודכן ל-${newContent} בהצלחה.`);
+      console.log(`התוכן של המשימה ${taskId} עודכן ל בהצלחה.`);
     } else {
       console.log(`לא נמצאה משימה עם ID: ${taskId}.`);
     }
