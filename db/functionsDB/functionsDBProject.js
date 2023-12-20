@@ -1,6 +1,5 @@
 import SchemaProject from "../schma/schemaProject.js";
 import SchmaTasks from "../schma/schmaTasks.js";
-import mongoose from 'mongoose';
 
 export const AddProject = async (req, res) => {
   const manager = req.body.manager;
@@ -10,11 +9,10 @@ export const AddProject = async (req, res) => {
       projectName: name,
       projectManager: manager,
     });
-    res.json(newProject)
-
+    res.json(newProject);
   } catch (error) {
     console.log(error);
-    res.error("a")
+    res.error("a");
   }
 };
 
@@ -25,7 +23,7 @@ export const DeleteProject = async (req, res) => {
   try {
     const rmProject = await SchemaProject.findById(projectId);
     if (!rmProject) {
-      throw new Error("משתמש לא קיים");
+      throw new Error("User is not exist");
     }
     rmProject.columns = rmProject.columns.filter((col) => col.id !== columnId);
     await rmProject.save();
@@ -75,26 +73,18 @@ export const RemoveMemberFromProject = async (req, res) => {
   }
 };
 
-export const GetAllData = async (req, res) => {
-    console.log("aaaaaaa");
+export const GetAllBoards = async (req, res) => {
   try {
     const allData = await SchemaProject.find();
-
-    if (allData.length > 0) {
-      console.log("הנתונים מסדרו לך:");
-      console.log(allData);
-    } else {
-      console.log("לא נמצאו נתונים במסד הנתונים.");
-    }
     res.json(allData);
-    // res.json(allData)
   } catch (error) {
     console.error("שגיאה במהלך השליפה:", error.message);
+    return res.status(400).json({ message: "Error finding boards" });
   }
 };
 
-export const GetProjectByID = async (req, res) => {
-  console.log("fun");
+export const getBoardById = async (req, res) => {
+  console.log("req.body::", req.body);
   try {
     const projectId = req.body.projectId;
     const project = await SchemaProject.findById(projectId);
@@ -108,12 +98,13 @@ export const GetProjectByID = async (req, res) => {
   }
 };
 
-export const UpdateProjectColumnUrgency = async (req, res) => {
+export const updateColumnColor = async (req, res) => {
   const projectID = req.body.projectId;
   const columnID = req.body.columnID;
   const newColumnUrgency = req.body.newColumnUrgency;
 
-  console.log(newColumnUrgency);
+  console.log("newColumnUrgency::", newColumnUrgency);
+
   try {
     const updatedProject = await SchemaProject.findOneAndUpdate(
       { _id: projectID, "columns.id": columnID },
@@ -133,29 +124,29 @@ export const UpdateProjectColumnUrgency = async (req, res) => {
   }
 };
 
-export const UpdateProjectColumnText = async (req, res) => {
-    const projectID = req.body.projectId;
-    const columnID = req.body.columnID;
-    const newColumntext = req.body.columnText;
-    try {
-      const updatedProject = await SchemaProject.findOneAndUpdate(
-        { _id: projectID, "columns.id": columnID },
-        { $set: { "columns.$.column": newColumntext } },
-        { new: true }
+export const updateColumnName = async (req, res) => {
+  const projectID = req.body.projectId;
+  const columnID = req.body.columnID;
+  const newColumntext = req.body.columnText;
+  try {
+    const updatedProject = await SchemaProject.findOneAndUpdate(
+      { _id: projectID, "columns.id": columnID },
+      { $set: { "columns.$.column": newColumntext } },
+      { new: true }
+    );
+
+    if (updatedProject) {
+      console.log(
+        `המצב של המשימה ${projectID} עודכן ל-${newColumntext} בהצלחה.`
       );
-  
-      if (updatedProject) {
-        console.log(
-          `המצב של המשימה ${projectID} עודכן ל-${newColumntext} בהצלחה.`
-        );
-      } else {
-        console.log(`לא נמצאה משימה עם ID: ${projectID}.`);
-      }
-      res.json(updatedProject)
-    } catch (error) {
-      console.error("שגיאה במהלך העדכון:", error.message);
+    } else {
+      console.log(`לא נמצאה משימה עם ID: ${projectID}.`);
     }
-  };
+    res.json(updatedProject);
+  } catch (error) {
+    console.error("שגיאה במהלך העדכון:", error.message);
+  }
+};
 
 // export const addColumnToProject = async (projectId, newColumn) => {
 //   try {
@@ -184,7 +175,7 @@ export const AddNewColumn = async (req, res) => {
   const nameColumn = req.body.nameColumn;
   try {
     const AddColumn = await SchemaProject.findByIdAndUpdate(
-        projectID,
+      projectID,
       {
         $push: {
           columns: { id: columnID, column: nameColumn, ColumnUrgency: "🔘" },
@@ -192,7 +183,7 @@ export const AddNewColumn = async (req, res) => {
       },
       { new: true } // הפרמטר הזה מחזיר את המסמך המעודכן
     );
-    res.json(AddColumn.columns)
+    res.json(AddColumn.columns);
 
     if (AddColumn) {
       console.log(`המחרוזת ${nameColumn} נוספה לפרויקט ${projectID} בהצלחה.`);
@@ -213,16 +204,15 @@ export const DeleteColumn = async (req, res) => {
       throw new Error("משתמש לא קיים");
     }
 
-    const tasksToDelete = await SchmaTasks.find({ columnId }); 
-    await SchmaTasks.deleteMany({ _id: { $in: tasksToDelete.map(t => t._id) } });
-    
+    const tasksToDelete = await SchmaTasks.find({ columnId });
+    await SchmaTasks.deleteMany({
+      _id: { $in: tasksToDelete.map((t) => t._id) },
+    });
 
     rmProject.columns = rmProject.columns.filter((col) => col.id !== columnId);
     await rmProject.save();
-    res.json(rmProject)
+    res.json(rmProject);
   } catch (error) {
     console.log(error);
   }
-
-  
 };
