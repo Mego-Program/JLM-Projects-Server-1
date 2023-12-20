@@ -1,7 +1,7 @@
 import SchmaTasks from "../schma/schmaTasks.js";
 
 export const AddTasks = async (req, res) => {
-  const IDproject = req.body.projectID;
+  const projectID = req.body.projectID;
   const columnId = req.body.columnId;
   const header = req.body.header;
   const content = req.body.content;
@@ -11,7 +11,7 @@ export const AddTasks = async (req, res) => {
 
   try {
     const newTasks = await SchmaTasks.create({
-      IDproject: IDproject,
+      IDproject: projectID,
       columnId: columnId,
       header: header,
       content: content,
@@ -43,7 +43,7 @@ export const DeleteTasks = async (req, res) => {
 export const UpdateTasksStatus = async (req, res) => {
   const taskId = req.body.taskId;
   const newColumn = req.body.newColumn;
- 
+
   try {
     const updateStatus = await SchmaTasks.findByIdAndUpdate(
       taskId,
@@ -52,13 +52,11 @@ export const UpdateTasksStatus = async (req, res) => {
     );
 
     if (updateStatus) {
-      
       console.log(`המצב של המשימה ${taskId} עודכן ל-${newColumn} בהצלחה.`);
     } else {
-      
       console.log(`לא נמצאה משימה עם ID: ${taskId}.`);
     }
-    res.json(updateStatus)
+    res.json(updateStatus);
   } catch (error) {
     console.error("שגיאה במהלך העדכון:", error.message);
   }
@@ -91,7 +89,7 @@ export const UpdateTaskContent = async (req, res) => {
     } else {
       console.log(`לא נמצאה משימה עם ID: ${taskId}.`);
     }
-    res.json(updateContent)
+    res.json(updateContent);
   } catch (error) {
     console.error("שגיאה במהלך העדכון:", error.message);
   }

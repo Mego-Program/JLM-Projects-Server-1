@@ -4,23 +4,23 @@ import {
   DeleteProject,
   AddMemberToProject,
   RemoveMemberFromProject,
-  GetAllData,
-  GetProjectByID,
-  UpdateProjectColumnUrgency,
-  UpdateProjectColumnText,
+  GetAllBoards,
+  getBoardById,
+  updateColumnColor,
+  updateColumnName,
   AddNewColumn,
-  DeleteColumn
+  DeleteColumn,
 } from "../db/functionsDB/functionsDBProject.js";
 
 const routerProject = express.Router();
 
-routerProject.post("/add_project",AddProject);
-routerProject.post("/add_member_to_project",AddMemberToProject);
-routerProject.post("/remove_member_from_project",RemoveMemberFromProject);
-routerProject.get("/",GetAllData);
-routerProject.post("/get_project_by_id",GetProjectByID)
-routerProject.post("/update_project_column_urgency",UpdateProjectColumnUrgency);
-routerProject.post("/update_project_column_text",UpdateProjectColumnText)
-routerProject.post("/add_new_column",AddNewColumn)
-routerProject.post("/delete_column",DeleteColumn);
-export default routerProject
+routerProject.post("/add_project", AddProject);
+routerProject.post("/add_member_to_project", AddMemberToProject);
+routerProject.post("/remove_member_from_project", RemoveMemberFromProject);
+routerProject.post("/get_all_data", GetAllBoards);
+routerProject.post("/get_project_by_id", getBoardById);
+routerProject.post("/update_project_column_urgency", updateColumnColor);
+routerProject.post("/update_project_column_text", updateColumnName);
+routerProject.post("/add_new_column", AddNewColumn);
+routerProject.post("/delete_column", DeleteColumn);
+export default routerProject;

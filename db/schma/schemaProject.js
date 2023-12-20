@@ -1,7 +1,6 @@
 import mongoose from "mongoose";
 
 const projectSchema = new mongoose.Schema({
-  
   projectsProductionDate: {
     type: Date,
     default: () => Date.now(),
@@ -21,9 +20,9 @@ const projectSchema = new mongoose.Schema({
   columns: {
     type: Array,
     default: [
-      { id: "todo" ,column: "Todo", ColumnUrgency: "🔘" },
-      { id: "doing" ,column: "Work in progress", ColumnUrgency: "🔘" },
-      { id: "todo" ,column: "Done", ColumnUrgency: "🔘" }
+      { id: "todo", column: "Todo", ColumnUrgency: "🔘" },
+      { id: "doing", column: "Work in progress", ColumnUrgency: "🔘" },
+      { id: "done", column: "Done", ColumnUrgency: "🔘" },
     ],
   },
 });
