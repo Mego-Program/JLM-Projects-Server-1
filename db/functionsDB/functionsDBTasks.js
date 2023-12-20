@@ -9,7 +9,6 @@ export const AddTasks = async (req, res) => {
   const asignee = req.body.asignee;
   const date = req.body.date;
 
-  console.log("req.body::", req.body);
   try {
     const newTasks = await SchmaTasks.create({
       IDproject: projectID,
