@@ -1,7 +1,10 @@
 import mongoose from "mongoose";
 
 const projectSchema = new mongoose.Schema({
-  
+  Sprint: {
+    type: Array,
+    default : [],
+      },
   projectsProductionDate: {
     type: Date,
     default: () => Date.now(),
@@ -23,7 +26,7 @@ const projectSchema = new mongoose.Schema({
     default: [
       { id: "todo" ,column: "Todo", ColumnUrgency: "🔘" },
       { id: "doing" ,column: "Work in progress", ColumnUrgency: "🔘" },
-      { id: "todo" ,column: "Done", ColumnUrgency: "🔘" }
+      { id: "done" ,column: "Done", ColumnUrgency: "🔘" }
     ],
   },
 });

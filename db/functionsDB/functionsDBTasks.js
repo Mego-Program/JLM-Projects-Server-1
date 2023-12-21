@@ -129,3 +129,78 @@ export const UpdateResponsibleUsername = async (req, res) => {
     console.error("שגיאה במהלך העדכון:", error.message);
   }
 };
+
+
+export const AddTaskToSprints = async (req, res) => {
+  const taskId = req.body.taskId; 
+  const projectID = req.body.projectID;
+  const taskSprintName = req.body.sprintName;
+
+  try {
+    const project = await SchemaProject.findById(projectID);
+  
+    for (let i = 0; i < project.Sprint.length; i++) {
+      if (project.Sprint[i].sprintName === taskSprintName) {
+        project.Sprint[i].taskArray.push(taskId);
+      }
+    };
+  
+  
+
+   const updatedProject = await project.save();
+
+    if (updatedProject) {
+      console.log("Task added to all sprints successfully");
+      return res.status(200).json({ message: "Task added to all sprints successfully" });
+    } else {
+      console.log("Failed to add task to sprints");
+      return res.status(500).json({ message: "Failed to add task to sprints" });
+    }
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ message: "Internal Server Error" });
+  }
+};
+
+export const DeleteTaskFromSprint = async (req, res) => {
+  const projectId = req.body.projectId;
+  const sprintName = req.body.sprintName;
+  const taskId = req.body.taskId;
+
+  try {
+    const project = await SchemaProject.findById(projectId);
+
+    // Find the sprint in which the task needs to be deleted
+    const sprintIndex = project.Sprint.findIndex((sprint) => sprint.sprintName === sprintName);
+
+    if (sprintIndex === -1) {
+      console.log('Sprint not found');
+      return res.status(404).json({ message: 'Sprint not found' });
+    }
+
+    // Find the task index in the taskArray of the sprint
+    const taskIndex = project.Sprint[sprintIndex].taskArray.indexOf(taskId);
+
+    if (taskIndex === -1) {
+      console.log('Task not found in the sprint');
+      return res.status(404).json({ message: 'Task not found in the sprint' });
+    }
+
+    // Remove the task from the taskArray of the sprint
+    project.Sprint[sprintIndex].taskArray.splice(taskIndex, 1);
+
+    // Save the updated project
+    const updatedProject = await project.save();
+
+    if (updatedProject) {
+      console.log('Task deleted from the sprint successfully');
+      return res.status(200).json({ message: 'Task deleted from the sprint successfully' });
+    } else {
+      console.log('Failed to delete task from the sprint');
+      return res.status(500).json({ message: 'Failed to delete task from the sprint' });
+    }
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: 'Internal Server Error' });
+  }
+};

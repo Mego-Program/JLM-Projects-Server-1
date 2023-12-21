@@ -226,3 +226,115 @@ export const DeleteColumn = async (req, res) => {
 
   
 };
+
+
+export const AddSprints = async(req, res) => {
+  const sprintName = req.body.name;
+  const startDate = req.body.startDate;
+  const endDate = req.body.endDate;
+  const projectID = req.body.projectID;
+  try {
+    const AddNewSprints = await SchemaProject.findByIdAndUpdate(
+      projectID,
+      {$push: {Sprint: {
+       sprintName : sprintName,
+       startDate : startDate,
+       endDate : endDate,
+       taskArray : [],
+      }}},
+      { new: true }
+    )
+    if (AddNewSprints){
+      console.log("Sprint Successfully added");
+      res.status(200).json({ message: "Sprint Successfully added" })
+    }
+    else{
+      console.log("Failed to add new sprint");
+      res.status(500).json({ message: "Failed to add Sprint" })
+
+    }
+  }
+  catch (error) {
+    console.log(error);
+  }
+}
+
+export const DeleteSprint = async (req, res) => {
+  const sprintName = req.body.sprintName;
+  const projectID = req.body.projectID;
+
+  try {
+    
+    const project = await SchemaProject.findById(projectID);
+
+    if (!project) {
+      console.log('Project not found');
+      return res.status(404).json({ message: 'Project not found' });
+    }
+
+    
+    const sprintIndex = project.Sprint.findIndex((sprint) => sprint.sprintName === sprintName);
+
+    if (sprintIndex === -1) {
+      console.log('Sprint not found');
+      return res.status(404).json({ message: 'Sprint not found' });
+    }
+
+   
+    project.Sprint.splice(sprintIndex, 1);
+
+   
+    const updatedProject = await project.save();
+
+    console.log('Sprint deleted successfully');
+    res.status(200).json({ message: 'Sprint deleted successfully', updatedProject });
+  } catch (error) {
+    console.error('Error deleting sprint:', error.message);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+};
+
+
+export const EditSprint = async (req, res) => {
+  const projectID = req.body.projectID;
+  const sprintName = req.body.sprintName;
+  const newName = req.body.newName;
+  const newStartDate = req.body.newStartDate;
+  const newEndDate = req.body.newEndDate;
+
+  try {
+    const project = await SchemaProject.findById(projectID);
+
+    if (!project) {
+      console.log('Project not found');
+      return res.status(404).json({ message: 'Project not found' });
+    }
+
+    const sprint = project.Sprint.find((sprint) => sprint.sprintName === sprintName);
+
+    if (!sprint) {
+      console.log('Sprint not found');
+      return res.status(404).json({ message: 'Sprint not found' });
+    }
+
+    if (newName) {
+      sprint.sprintName = newName;
+    }
+
+    if (newStartDate) {
+      sprint.startDate = newStartDate;
+    }
+
+    if (newEndDate) {
+      sprint.endDate = newEndDate;
+    }
+
+    const updatedProject = await project.save();
+
+    console.log('Sprint edited successfully');
+    res.status(200).json({ message: 'Sprint edited successfully', updatedProject });
+  } catch (error) {
+    console.error('Error editing sprint:', error.message);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+};
