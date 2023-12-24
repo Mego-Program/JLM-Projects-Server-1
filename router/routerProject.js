@@ -17,10 +17,9 @@ import {
 const routerProject = express.Router();
 
 routerProject.post("/add_project",AddProject);
-routerProject.post("/delete_project",DeleteProject)
 routerProject.post("/add_member_to_project",AddMemberToProject);
 routerProject.post("/remove_member_from_project",RemoveMemberFromProject);
-routerProject.post("/",GetAllBoards);
+routerProject.post("/get_all_data",GetAllBoards);
 routerProject.post("/get_project_by_id",getBoardById);
 routerProject.post("/update_project_column_urgency",updateColumnColor);
 routerProject.post("/update_project_column_text",updateColumnName);
