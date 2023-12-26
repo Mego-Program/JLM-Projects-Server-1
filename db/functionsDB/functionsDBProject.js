@@ -328,3 +328,13 @@ export const EditSprint = async (req, res) => {
     res.status(500).json({ message: 'Internal Server Error' });
   }
 };
+
+export const GetAllSprints = async (req, res) => {
+  try {
+    const allSprints = await SchemaProject.find();
+    res.json(allSprints);
+  } catch (error) {
+    console.error("שגיאה במהלך השליפה:", error.message);
+    return res.status(400).json({ message: "Error finding sprints" });
+  }
+};
