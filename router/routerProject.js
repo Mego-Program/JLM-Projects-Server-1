@@ -13,6 +13,7 @@ import {
   AddSprints,
   DeleteSprint,
   EditSprint,
+  GetAllSprints,
 } from "../db/functionsDB/functionsDBProject.js";
 
 const routerProject = express.Router();
@@ -29,6 +30,6 @@ routerProject.post("/delete_column",DeleteColumn);
 routerProject.post("/add_sprint",AddSprints);
 routerProject.post("/delete_sprint",DeleteSprint);
 routerProject.post("/edit_sprint",EditSprint);
-
+routerProject.post("/GetAllSprints",GetAllSprints);
 
 export default routerProject
