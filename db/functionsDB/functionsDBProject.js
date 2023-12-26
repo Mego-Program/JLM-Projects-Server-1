@@ -16,6 +16,8 @@ export const AddProject = async (req, res) => {
   }
 };
 
+
+
 export const DeleteProject = async (req, res) => {
   const projectId = req.body.projectId;
   const columnId = req.body.columnId;
@@ -216,3 +218,34 @@ export const DeleteColumn = async (req, res) => {
     console.log(error);
   }
 };
+
+export const GetUsersByProjectId = async (req, res) => {
+  const projectId = req.query.projectId; // Assuming projectId is passed as a query parameter
+
+  try {
+    console.log("hiiii");
+    // Validate projectId (assuming it's a valid ObjectId, adjust validation as needed)
+    if (!isValidObjectId(projectId)) {
+      return res.status(400).json({ error: 'Invalid projectId' });
+    }
+
+    // Fetch project details including members, manager, and name
+    const projectDetails = await SchmaTasks.findOne({ IDproject: projectId });
+
+    // Check if no project was found
+    if (!projectDetails) {
+      return res.status(404).json({ error: 'Project not found for the specified projectId' });
+    }
+
+    res.json({
+      projectMembers: projectDetails.projectMembers,
+      projectManager: projectDetails.projectManager,
+      projectName: projectDetails.projectName,
+    });
+  } catch (error) {
+    console.error('Error fetching project details:', error.message);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
+

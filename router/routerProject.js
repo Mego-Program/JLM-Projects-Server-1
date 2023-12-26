@@ -10,6 +10,7 @@ import {
   updateColumnName,
   AddNewColumn,
   DeleteColumn,
+  GetUsersByProjectId,
 } from "../db/functionsDB/functionsDBProject.js";
 
 const routerProject = express.Router();
@@ -23,4 +24,6 @@ routerProject.post("/update_project_column_urgency", updateColumnColor);
 routerProject.post("/update_project_column_text", updateColumnName);
 routerProject.post("/add_new_column", AddNewColumn);
 routerProject.post("/delete_column", DeleteColumn);
+routerProject.post("/get_project_details", GetUsersByProjectId);
+
 export default routerProject;
