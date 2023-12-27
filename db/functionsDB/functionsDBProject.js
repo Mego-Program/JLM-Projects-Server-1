@@ -217,78 +217,75 @@ export const DeleteColumn = async (req, res) => {
   }
 };
 
-
-export const AddSprints = async(req, res) => {
-  const sprintName = req.body.name;
-  const startDate = req.body.startDate;
-  const endDate = req.body.endDate;
-  const taskArray = req.body.taskArray;
-  const projectID = req.body.projectID;
-  console.log('req.body:',req.body);
-  let AddNewSprints
+export const AddSprints = async (req, res) => {
+  const { sprintName, startDate, endDate, taskArray } = req.body;
+  const projectID = taskArray[0].IDproject;
+  let AddNewSprints;
   try {
-      AddNewSprints = await SchemaProject.findByIdAndUpdate(
+    AddNewSprints = await SchemaProject.findByIdAndUpdate(
       projectID,
-      {$push: {Sprint: {
-       sprintName : sprintName,
-       startDate : startDate,
-       endDate : endDate,
-       taskArray : taskArray,
-      }}},
+      {
+        $push: {
+          Sprint: {
+            sprintName,
+            startDate,
+            endDate,
+            taskArray,
+          },
+        },
+      },
       { new: true }
-    )
-    if (AddNewSprints){
-      console.log("Sprint Successfully added",AddNewSprints);
-      res.status(200).json({ message: "Sprint Successfully added" })
-    }
-    else{
+    );
+    if (AddNewSprints) {
+      console.log("Sprint Successfully added", AddNewSprints);
+      res.status(200).json({ message: "Sprint Successfully added" });
+    } else {
       console.log("Failed to add new sprint");
-      res.status(500).json({ message: "Failed to add Sprint" })
-      console.log(sprintName,startDate,taskArray);
-      console.log('add new sprint:',AddNewSprints);
+      res.status(400).json({ message: "Failed to add Sprint " });
+      console.log(sprintName, startDate, taskArray);
+      console.log("add new sprint:", AddNewSprints);
     }
-  }
-  catch (error) {
+  } catch (error) {
     console.log(error);
-    console.log('AddNewSprints:',AddNewSprints);
+    console.log("AddNewSprints:", AddNewSprints);
+    return res.status(400).json({ message: "Failed to add Sprint" });
   }
-}
+};
 
 export const DeleteSprint = async (req, res) => {
   const sprintName = req.body.sprintName;
   const projectID = req.body.projectID;
 
   try {
-    
     const project = await SchemaProject.findById(projectID);
 
     if (!project) {
-      console.log('Project not found');
-      return res.status(404).json({ message: 'Project not found' });
+      console.log("Project not found");
+      return res.status(404).json({ message: "Project not found" });
     }
 
-    
-    const sprintIndex = project.Sprint.findIndex((sprint) => sprint.sprintName === sprintName);
+    const sprintIndex = project.Sprint.findIndex(
+      (sprint) => sprint.sprintName === sprintName
+    );
 
     if (sprintIndex === -1) {
-      console.log('Sprint not found');
-      return res.status(404).json({ message: 'Sprint not found' });
+      console.log("Sprint not found");
+      return res.status(404).json({ message: "Sprint not found" });
     }
 
-   
     project.Sprint.splice(sprintIndex, 1);
 
-   
     const updatedProject = await project.save();
 
-    console.log('Sprint deleted successfully');
-    res.status(200).json({ message: 'Sprint deleted successfully', updatedProject });
+    console.log("Sprint deleted successfully");
+    res
+      .status(200)
+      .json({ message: "Sprint deleted successfully", updatedProject });
   } catch (error) {
-    console.error('Error deleting sprint:', error.message);
-    res.status(500).json({ message: 'Internal Server Error' });
+    console.error("Error deleting sprint:", error.message);
+    res.status(500).json({ message: "Internal Server Error" });
   }
 };
-
 
 export const EditSprint = async (req, res) => {
   const projectID = req.body.projectID;
@@ -301,15 +298,17 @@ export const EditSprint = async (req, res) => {
     const project = await SchemaProject.findById(projectID);
 
     if (!project) {
-      console.log('Project not found');
-      return res.status(404).json({ message: 'Project not found' });
+      console.log("Project not found");
+      return res.status(404).json({ message: "Project not found" });
     }
 
-    const sprint = project.Sprint.find((sprint) => sprint.sprintName === sprintName);
+    const sprint = project.Sprint.find(
+      (sprint) => sprint.sprintName === sprintName
+    );
 
     if (!sprint) {
-      console.log('Sprint not found');
-      return res.status(404).json({ message: 'Sprint not found' });
+      console.log("Sprint not found");
+      return res.status(404).json({ message: "Sprint not found" });
     }
 
     if (newName) {
@@ -326,11 +325,13 @@ export const EditSprint = async (req, res) => {
 
     const updatedProject = await project.save();
 
-    console.log('Sprint edited successfully');
-    res.status(200).json({ message: 'Sprint edited successfully', updatedProject });
+    console.log("Sprint edited successfully");
+    res
+      .status(200)
+      .json({ message: "Sprint edited successfully", updatedProject });
   } catch (error) {
-    console.error('Error editing sprint:', error.message);
-    res.status(500).json({ message: 'Internal Server Error' });
+    console.error("Error editing sprint:", error.message);
+    res.status(500).json({ message: "Internal Server Error" });
   }
 };
 
