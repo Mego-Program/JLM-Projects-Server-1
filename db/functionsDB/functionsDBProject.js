@@ -222,30 +222,35 @@ export const AddSprints = async(req, res) => {
   const sprintName = req.body.name;
   const startDate = req.body.startDate;
   const endDate = req.body.endDate;
+  const taskArray = req.body.taskArray;
   const projectID = req.body.projectID;
+  console.log('req.body:',req.body);
+  let AddNewSprints
   try {
-    const AddNewSprints = await SchemaProject.findByIdAndUpdate(
+      AddNewSprints = await SchemaProject.findByIdAndUpdate(
       projectID,
       {$push: {Sprint: {
        sprintName : sprintName,
        startDate : startDate,
        endDate : endDate,
-       taskArray : [],
+       taskArray : taskArray,
       }}},
       { new: true }
     )
     if (AddNewSprints){
-      console.log("Sprint Successfully added");
+      console.log("Sprint Successfully added",AddNewSprints);
       res.status(200).json({ message: "Sprint Successfully added" })
     }
     else{
       console.log("Failed to add new sprint");
       res.status(500).json({ message: "Failed to add Sprint" })
-
+      console.log(sprintName,startDate,taskArray);
+      console.log('add new sprint:',AddNewSprints);
     }
   }
   catch (error) {
     console.log(error);
+    console.log('AddNewSprints:',AddNewSprints);
   }
 }
 
