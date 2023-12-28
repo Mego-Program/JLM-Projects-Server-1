@@ -27,7 +27,6 @@ export const AddTasks = async (req, res) => {
 
 export const DeleteTasks = async (req, res) => {
   const taskeId = req.body.taskeId;
-  // const columnId = req.body.columnId
   try {
     const rmTaske = await SchmaTasks.findByIdAndDelete(taskeId);
     if (!rmTaske) {
@@ -48,7 +47,7 @@ export const UpdateTasksStatus = async (req, res) => {
     const updateStatus = await SchmaTasks.findByIdAndUpdate(
       taskId,
       { $set: { columnId: newColumn } },
-      { new: true } // הפרמטר הזה מחזיר את המסמך המעודכן
+      { new: true } 
     );
 
     if (updateStatus) {

@@ -1,20 +1,4 @@
 import mongoose from "mongoose";
-import data from "../data.js";
-import {
-  AddProject,
-  DeleteProject,
-  AddMemberToProject,
-  RemoveMemberFromProject,
-  GetAllBoards,
-} from "./functionsDB/functionsDBProject.js";
-import {
-  AddTasks,
-  UpdateTasksStatus,
-  DeleteTasks,
-  GetTasksByProjectId,
-} from "./functionsDB/functionsDBTasks.js";
-
-const myData = data;
 
 const coonected = async () => {
   try {
