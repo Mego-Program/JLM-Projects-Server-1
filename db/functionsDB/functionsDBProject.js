@@ -237,7 +237,7 @@ export const AddSprints = async (req, res) => {
       { new: true }
     );
     if (AddNewSprints) {
-      console.log("Sprint Successfully added", AddNewSprints);
+      console.log("Sprint Successfully added:", AddNewSprints);
       res.status(200).json({ message: "Sprint Successfully added" });
     } else {
       console.log("Failed to add new sprint");
