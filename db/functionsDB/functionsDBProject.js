@@ -216,3 +216,131 @@ export const DeleteColumn = async (req, res) => {
     console.log(error);
   }
 };
+
+export const AddSprints = async (req, res) => {
+  const { sprintName, startDate, endDate, taskArray } = req.body;
+  const projectID = taskArray[0].IDproject;
+  let AddNewSprints;
+  try {
+    AddNewSprints = await SchemaProject.findByIdAndUpdate(
+      projectID,
+      {
+        $push: {
+          Sprint: {
+            sprintName,
+            startDate,
+            endDate,
+            taskArray,
+          },
+        },
+      },
+      { new: true }
+    );
+    if (AddNewSprints) {
+      console.log("Sprint Successfully added:", AddNewSprints);
+      res.status(200).json({ message: "Sprint Successfully added" });
+    } else {
+      console.log("Failed to add new sprint");
+      res.status(400).json({ message: "Failed to add Sprint " });
+      console.log(sprintName, startDate, taskArray);
+      console.log("add new sprint:", AddNewSprints);
+    }
+  } catch (error) {
+    console.log(error);
+    console.log("AddNewSprints:", AddNewSprints);
+    return res.status(400).json({ message: "Failed to add Sprint" });
+  }
+};
+
+export const DeleteSprint = async (req, res) => {
+  const sprintName = req.body.sprintName;
+  const projectID = req.body.projectID;
+
+  try {
+    const project = await SchemaProject.findById(projectID);
+
+    if (!project) {
+      console.log("Project not found");
+      return res.status(404).json({ message: "Project not found" });
+    }
+
+    const sprintIndex = project.Sprint.findIndex(
+      (sprint) => sprint.sprintName === sprintName
+    );
+
+    if (sprintIndex === -1) {
+      console.log("Sprint not found");
+      return res.status(404).json({ message: "Sprint not found" });
+    }
+
+    project.Sprint.splice(sprintIndex, 1);
+
+    const updatedProject = await project.save();
+
+    console.log("Sprint deleted successfully");
+    res
+      .status(200)
+      .json({ message: "Sprint deleted successfully", updatedProject });
+  } catch (error) {
+    console.error("Error deleting sprint:", error.message);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+};
+
+export const EditSprint = async (req, res) => {
+  const projectID = req.body.projectID;
+  const sprintName = req.body.sprintName;
+  const newName = req.body.newName;
+  const newStartDate = req.body.newStartDate;
+  const newEndDate = req.body.newEndDate;
+
+  try {
+    const project = await SchemaProject.findById(projectID);
+
+    if (!project) {
+      console.log("Project not found");
+      return res.status(404).json({ message: "Project not found" });
+    }
+
+    const sprint = project.Sprint.find(
+      (sprint) => sprint.sprintName === sprintName
+    );
+
+    if (!sprint) {
+      console.log("Sprint not found");
+      return res.status(404).json({ message: "Sprint not found" });
+    }
+
+    if (newName) {
+      sprint.sprintName = newName;
+    }
+
+    if (newStartDate) {
+      sprint.startDate = newStartDate;
+    }
+
+    if (newEndDate) {
+      sprint.endDate = newEndDate;
+    }
+
+    const updatedProject = await project.save();
+
+    console.log("Sprint edited successfully");
+    res
+      .status(200)
+      .json({ message: "Sprint edited successfully", updatedProject });
+  } catch (error) {
+    console.error("Error editing sprint:", error.message);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+};
+
+export const GetAllSprints = async (req, res) => {
+  try {
+    const allSprints = await SchemaProject.find();
+    res.json(allSprints);
+  } catch (error) {
+    console.error("שגיאה במהלך השליפה:", error.message);
+    return res.status(400).json({ message: "Error finding sprints" });
+  }
+};
