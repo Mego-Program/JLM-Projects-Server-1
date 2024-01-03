@@ -1,14 +1,19 @@
 import SchemaProject from "../schma/schemaProject.js";
 import SchmaTasks from "../schma/schmaTasks.js";
+import axios from "axios";
 
 export const AddProject = async (req, res) => {
   const manager = req.body.manager;
   const name = req.body.name;
+  const users = req.body.users
   try {
     const newProject = await SchemaProject.create({
       projectName: name,
       projectManager: manager,
+      projectMembers: users,
+
     });
+    await newProject.save()
     res.json(newProject);
   } catch (error) {
     console.log(error);
@@ -19,20 +24,20 @@ export const AddProject = async (req, res) => {
 
 
 export const DeleteProject = async (req, res) => {
-  const projectId = req.body.projectId;
-  const columnId = req.body.columnId;
+const {boardId}= req.body
 
   try {
-    const rmProject = await SchemaProject.findById(projectId);
-    if (!rmProject) {
-      throw new Error("User is not exist");
-    }
-    rmProject.columns = rmProject.columns.filter((col) => col.id !== columnId);
-    await rmProject.save();
+    const rmProject = await SchemaProject.findOne({_id:boardId._id});
+
+        try{
+    const del = await rmProject.deleteOne()}catch(e){console.log('err delete:',e);}
+    rmProject.columns = rmProject.columns.filter((col) => col.id !== boardId);
+    res.status(200).send('deleted')
   } catch (error) {
     console.log(error);
   }
 };
+
 
 export const AddMemberToProject = async (req, res) => {
   const projectId = req.body.projectId;
@@ -219,33 +224,43 @@ export const DeleteColumn = async (req, res) => {
   }
 };
 
-export const GetUsersByProjectId = async (req, res) => {
-  const projectId = req.query.projectId; // Assuming projectId is passed as a query parameter
-
+export const updateBoard = async (req, res) => {
+  const projectId = req.body.projectId;
+  const projectManager = req.body.projectManager;
+  const projectName = req.body.projectName;
+  const projectMembers = req.body.projectMembers
   try {
-    console.log("hiiii");
-    // Validate projectId (assuming it's a valid ObjectId, adjust validation as needed)
-    if (!isValidObjectId(projectId)) {
-      return res.status(400).json({ error: 'Invalid projectId' });
+    const updatedProject = await SchemaProject.findOneAndUpdate(
+      { _id: projectId,},
+      { $set: { projectName: projectName ,
+    projectMembers:projectMembers,
+  projectManager:projectManager} },
+      { new: true }
+    );
+
+    if (updatedProject) {
+      console.log(
+        `המצב של המשימה ${projectId} עודכן ל-${projectName} בהצלחה.`
+      );
+    } else {
+      console.log(`לא נמצאה משימה עם ID: ${projectId}.`);
     }
+    res.json(updatedProject);
 
-    // Fetch project details including members, manager, and name
-    const projectDetails = await SchmaTasks.findOne({ IDproject: projectId });
-
-    // Check if no project was found
-    if (!projectDetails) {
-      return res.status(404).json({ error: 'Project not found for the specified projectId' });
-    }
-
-    res.json({
-      projectMembers: projectDetails.projectMembers,
-      projectManager: projectDetails.projectManager,
-      projectName: projectDetails.projectName,
-    });
   } catch (error) {
-    console.error('Error fetching project details:', error.message);
-    res.status(500).json({ error: 'Internal Server Error' });
+    console.error("שגיאה במהלך העדכון:", error.message);
   }
 };
 
 
+export const getUsers = async (req, res) => {
+  try {
+    const response = await axios.post(
+      "https://infra-jerusalem-1-server-five.vercel.app/users/allusers"
+    );
+
+    res.status(200).json(response.data);
+  } catch (error) {
+    console.log(error);
+  }
+}

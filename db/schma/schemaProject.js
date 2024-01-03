@@ -6,7 +6,7 @@ const projectSchema = new mongoose.Schema({
     default: () => Date.now(),
   },
   projectManager: {
-    type: String,
+    type: Object,
     required: true,
   },
   projectName: {
