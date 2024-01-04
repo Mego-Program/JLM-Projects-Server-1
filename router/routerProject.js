@@ -12,6 +12,10 @@ import {
   DeleteColumn,
   updateBoard,
   getUsers,
+  AddSprints,
+  DeleteSprint,
+  EditSprint,
+  GetAllSprints,
 } from "../db/functionsDB/functionsDBProject.js";
 
 const routerProject = express.Router();
@@ -30,4 +34,5 @@ routerProject.post("/get_users",getUsers)
 routerProject.delete('/',DeleteProject)
 
 
-export default routerProject;
+
+

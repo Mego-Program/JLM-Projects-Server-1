@@ -6,6 +6,8 @@ import {
   UpdateTaskContent,
   GetTasksByProjectId,
   UpdateResponsibleUsername,
+  AddTaskToSprints,
+  DeleteTaskFromSprint,
 } from "../db/functionsDB/functionsDBTasks.js";
  const routerTasks = express.Router();
 
@@ -15,5 +17,7 @@ import {
  routerTasks.post("/update_task_content",UpdateTaskContent)
  routerTasks.post("/get_tasks_by_projectId",GetTasksByProjectId)
  routerTasks.post("/update_responsible_username",UpdateResponsibleUsername)
+ routerTasks.post("/add_task_to_sprint",AddTaskToSprints)
+ routerTasks.post("/delete_task_from_sprint",DeleteTaskFromSprint)
 
 export default routerTasks
