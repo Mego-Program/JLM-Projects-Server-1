@@ -33,6 +33,8 @@ routerProject.post("/update_board",updateBoard)
 routerProject.post("/get_users",getUsers)
 routerProject.delete('/',DeleteProject)
 
+export default routerProject
+
 
 
 
