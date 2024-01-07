@@ -1,6 +1,8 @@
 import SchemaProject from "../schma/schemaProject.js";
 import SchmaTasks from "../schma/schmaTasks.js";
 import axios from "axios";
+import { v1 as uuidv1 } from "uuid";
+
 
 export const AddProject = async (req, res) => {
   const manager = req.body.manager;
@@ -11,6 +13,13 @@ export const AddProject = async (req, res) => {
       projectName: name,
       projectManager: manager,
       projectMembers: users,
+      columnIDs: {
+        Open: uuidv1(),
+        InProgress: uuidv1(),
+        Resolved: uuidv1(),
+        Closed: uuidv1()
+
+      }
 
     });
     await newProject.save()

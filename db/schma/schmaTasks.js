@@ -1,16 +1,12 @@
 import mongoose from "mongoose";
 
 const tasksSchma = new mongoose.Schema({
-    // "ProductionDate": {
-    //   "type": Date,
-    //   "default": () => Date.now()
-    // },
+
     "IDproject": {
       "type": String
     },
     "columnId": {
       "type": String,
-      "default": "todo" 
     },
     "header":{
       "type":String
@@ -32,5 +28,5 @@ const tasksSchma = new mongoose.Schema({
     }
   })
 
-  const SchmaTasks = mongoose.model("schms", tasksSchma);
+  const SchmaTasks = mongoose.model("schms1", tasksSchma);
   export default SchmaTasks;

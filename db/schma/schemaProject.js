@@ -3,8 +3,8 @@ import mongoose from "mongoose";
 const projectSchema = new mongoose.Schema({
   Sprint: {
     type: Array,
-    default : [],
-      },
+    default: [],
+  },
   projectsProductionDate: {
     type: Date,
     default: () => Date.now(),
@@ -21,15 +21,29 @@ const projectSchema = new mongoose.Schema({
     type: Array,
     default: [],
   },
-  columns: {
-    type: Array,
-    default: [
-      { id: "todo" ,column: "Todo", ColumnUrgency: "🔘" },
-      { id: "doing" ,column: "Work in progress", ColumnUrgency: "🔘" },
-      { id: "done" ,column: "Done", ColumnUrgency: "🔘" }
-    ],
+  columnIDs: {
+    Open: {
+      type: String,
+      unique: true,
+      required: true,
+    },
+    InProgress: {
+      type: String,
+      unique: true,
+      required: true,
+    },
+    Resolved: {
+      type: String,
+      unique: true,
+      required: true,
+    },
+    Closed: {
+      type: String,
+      unique: true,
+      required: true,
+    },
   },
 });
 
-const SchemaProject = mongoose.model("projects", projectSchema);
+const SchemaProject = mongoose.model("projects1", projectSchema);
 export default SchemaProject;
