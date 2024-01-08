@@ -30,8 +30,11 @@ routerProject.post("/update_project_column_text", updateColumnName);
 routerProject.post("/add_new_column", AddNewColumn);
 routerProject.post("/delete_column", DeleteColumn);
 routerProject.post("/update_board",updateBoard)
-routerProject.post("/get_users",getUsers)
-routerProject.delete('/',DeleteProject)
+routerProject.post("/get_users",getUsers);
+routerProject.delete('/',DeleteProject);
+routerProject.post("/addSprint",AddSprints);
+routerProject.post("/deleteSprint",DeleteSprint);
+routerProject.post("/editSprint",EditSprint);
+routerProject.post("/getAllSprints",GetAllSprints);
 
 export default routerProject
-
